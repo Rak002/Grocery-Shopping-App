@@ -1,0 +1,4 @@
+itemName,quantity,price,seller,inStock,rating
+apple,12,30,Seller1,4,4.1
+banana,12,30,Seller2,8,3.5
+pickles,1,30,Seller2,5,4

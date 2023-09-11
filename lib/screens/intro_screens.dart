@@ -120,7 +120,7 @@ class IntroScreen extends StatelessWidget {
           style: TextStyle(fontSize: 24, color: Colors.white),
         ),
       ),
-      // Next button
+      // Get Started button
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(
           right: 20,

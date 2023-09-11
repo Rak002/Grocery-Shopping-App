@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_shopping_app/models/item_model.dart';
+import 'package:provider/provider.dart';
 import 'screens/intro_screens.dart';
 
 void main() {
@@ -10,10 +12,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Grocery Shopping App',
-      home: IntroScreen(),
+    return ChangeNotifierProvider(
+      create: (context) => ItemModel(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Grocery Shopping App',
+        home: IntroScreen(),
+      ),
     );
   }
 }
