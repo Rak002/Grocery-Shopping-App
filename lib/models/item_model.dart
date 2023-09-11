@@ -22,9 +22,53 @@ class ItemModel extends ChangeNotifier {
     ["bread", "6", "30", "5", "4"],
     ["rice", "1bag", "60", "5", "4"],
   ];
-  get forYouItemsGetter {
+  get ItemsGetter {
     for_you_items;
     most_ordered_items;
     new_prodcuts_items;
+  }
+
+  List cart_items = [
+    // [itemName,quantity,price,inStock,rating]
+  ];
+
+  get CartItemGetter => cart_items;
+
+  void addItemToCart(String sectionName, String itemName) {
+    if (sectionName == "For You") {
+      for (int i = 0; i < for_you_items.length; i++) {
+        if (for_you_items[i][0] == itemName) {
+          cart_items.add(for_you_items[i]);
+        }
+      }
+    } else if (sectionName == "Most Ordered") {
+      for (int i = 0; i < most_ordered_items.length; i++) {
+        if (most_ordered_items[i][0] == itemName) {
+          cart_items.add(most_ordered_items[i]);
+        }
+      }
+    } else if (sectionName == "New Products") {
+      for (int i = 0; i < new_prodcuts_items.length; i++) {
+        if (new_prodcuts_items[i][0] == itemName) {
+          cart_items.add(new_prodcuts_items[i]);
+        }
+      }
+    }
+    print("cart_items : $cart_items");
+    notifyListeners();
+  }
+
+  void removeItemFromCart(int index) {
+    cart_items.removeAt(index);
+    notifyListeners();
+    print("cart_items : $cart_items");
+  }
+
+  String calculateTotal() {
+    double total = 0;
+    for (int i = 0; i < cart_items.length; i++) {
+      total += double.parse(cart_items[i][2]);
+    }
+    return total.toStringAsFixed(2);
   }
 }
