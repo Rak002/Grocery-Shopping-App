@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -5,12 +6,13 @@ import '../models/item_model.dart';
 import '../screens/home_screen.dart';
 import '../screens/cart_screen.dart';
 import '../screens/payment_screen.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'dart:io';
 
-Widget createTile(String itemName, String quantity, String price,
-    String inStock, String rating, String sectionName, BuildContext _context) {
+Widget createTile(
+    int index_, List items, String sectionName, BuildContext _context) {
   Image itemImage = Image.asset(
-    "lib/images/var_images/$itemName.png",
+    "lib/images/var_images/${items[index_][0]}.png",
     errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
       return Image.asset('lib/images/var_images/not_found.png');
     },
@@ -25,29 +27,123 @@ Widget createTile(String itemName, String quantity, String price,
           bottom: 5,
         ),
         child: Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          extendBodyBehindAppBar: true,
           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          floatingActionButton: InkWell(
-            onTap: () {
-              Provider.of<ItemModel>(_context, listen: false)
-                  .addItemToCart(sectionName, "$itemName");
-            },
-            child: Container(
-              width: 40.0,
-              height: 40.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.green,
+          appBar: AppBar(
+            title: Text(
+              "${capitalizeWords(items[index_][0])}",
+              style: GoogleFonts.notoSans(
+                textStyle: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 36, 164, 0),
+                ),
               ),
-              child: Center(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 30.0,
+            ),
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            toolbarHeight: 40,
+          ),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(
+              bottom: 10,
+            ),
+            child: InkWell(
+              onTap: () {
+                Provider.of<ItemModel>(_context, listen: false)
+                    .addItemToCart(sectionName, index_);
+              },
+              child: Container(
+                width: 40.0,
+                height: 40.0,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green,
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 30.0,
+                  ),
                 ),
               ),
             ),
           ),
           body: itemImage,
+          bottomNavigationBar: Container(
+              height: 60,
+              color: Color.fromARGB(68, 89, 255, 0),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                    ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "₹${items[index_][2]}",
+                                  style: GoogleFonts.notoSans(
+                                    textStyle: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 65, 178, 0),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  " - ${items[index_][1]}",
+                                  style: GoogleFonts.notoSans(
+                                    textStyle: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(170, 65, 178, 0),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                          Text(
+                            "${items[index_][3]} left",
+                            style: GoogleFonts.notoSans(
+                              textStyle: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(221, 65, 178, 0),
+                              ),
+                            ),
+                          ),
+                        ]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      left: 50,
+                    ),
+                    child: CircularPercentIndicator(
+                      radius: 18.0,
+                      lineWidth: 6.0,
+                      percent: double.parse(items[index_][4]) / 5.0,
+                      center: new Text(
+                        "${items[index_][4]}",
+                        style: GoogleFonts.notoSans(
+                          textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(221, 65, 178, 0),
+                          ),
+                        ),
+                      ),
+                      progressColor: Colors.green,
+                    ),
+                  ),
+                ],
+              )),
         )),
   );
 }
@@ -127,16 +223,9 @@ class CustomSections extends StatelessWidget {
               bottom: 10,
             ),
             child: Container(
-              color: Color.fromARGB(32, 89, 255, 0),
+              color: const Color.fromARGB(68, 89, 255, 0),
               width: 240,
-              child: createTile(
-                  items[index][0],
-                  items[index][1],
-                  items[index][2],
-                  items[index][3],
-                  items[index][4],
-                  section_name,
-                  context),
+              child: createTile(index, items, section_name, context),
             ),
           );
         },
@@ -161,7 +250,7 @@ class Footer extends StatelessWidget {
                 onTap: () {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
-                    return HomeScreen();
+                    return const HomeScreen();
                   }));
                 },
                 splashColor: Colors.transparent,
@@ -204,7 +293,7 @@ class Footer extends StatelessWidget {
                 onTap: () {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
-                    return CartScreen();
+                    return const CartScreen();
                   }));
                 },
                 splashColor: Colors.transparent,
@@ -227,7 +316,7 @@ class Footer extends StatelessWidget {
                 onTap: () {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
-                    return PaymentScreen();
+                    return PaymentScreen_();
                   }));
                 },
                 splashColor: Colors.transparent,
