@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -9,9 +8,9 @@ import '../screens/payment_screen.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'dart:io';
 
-Widget createTile(
+Widget SectionTiles(
     int index_, List items, String sectionName, BuildContext _context) {
-  Image itemImage = Image.asset(
+  Widget itemImage = Image.asset(
     "lib/images/var_images/${items[index_][0]}.png",
     errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
       return Image.asset('lib/images/var_images/not_found.png');
@@ -29,8 +28,8 @@ Widget createTile(
         child: Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           extendBodyBehindAppBar: true,
-          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          /*appBar: AppBar(
             title: Text(
               "${capitalizeWords(items[index_][0])}",
               style: GoogleFonts.notoSans(
@@ -44,102 +43,135 @@ Widget createTile(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
             toolbarHeight: 40,
-          ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(
-              bottom: 10,
+          ),*/
+          floatingActionButton: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(0),
+              shape: CircleBorder(),
+              foregroundColor: Color.fromARGB(255, 59, 118, 255),
             ),
-            child: InkWell(
-              onTap: () {
-                Provider.of<ItemModel>(_context, listen: false)
-                    .addItemToCart(sectionName, index_);
-              },
-              child: Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 30.0,
-                  ),
+            onPressed: () {
+              Provider.of<ItemModel>(_context, listen: false)
+                  .addItemToCart(sectionName, index_);
+            },
+            child: Text(
+              "+",
+              style: GoogleFonts.notoSans(
+                textStyle: const TextStyle(
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
             ),
           ),
-          body: itemImage,
+          body: Padding(
+            padding: const EdgeInsets.only(
+              top: 10,
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15), child: itemImage),
+            ),
+          ),
           bottomNavigationBar: Container(
-              height: 60,
-              color: Color.fromARGB(68, 89, 255, 0),
+              height: 70,
+              color: Colors.transparent,
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 15,
+                      ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "${capitalizeWords(items[index_][0])}",
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(255, 36, 164, 0),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "  ${items[index_][3]} left",
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(221, 65, 178, 0),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                            Expanded(
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "₹${items[index_][2]}",
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(255, 65, 178, 0),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      " - ${items[index_][1]}",
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(170, 65, 178, 0),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                          ]),
                     ),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "₹${items[index_][2]}",
-                                  style: GoogleFonts.notoSans(
-                                    textStyle: const TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 65, 178, 0),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  " - ${items[index_][1]}",
-                                  style: GoogleFonts.notoSans(
-                                    textStyle: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(170, 65, 178, 0),
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                          Text(
-                            "${items[index_][3]} left",
-                            style: GoogleFonts.notoSans(
-                              textStyle: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(221, 65, 178, 0),
-                              ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 5,
+                        bottom: 5,
+                      ),
+                      child: CircularPercentIndicator(
+                        radius: 18.0,
+                        lineWidth: 6.0,
+                        percent: double.parse(items[index_][4]) / 5.0,
+                        center: Text(
+                          "${items[index_][4]}",
+                          style: GoogleFonts.notoSans(
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(221, 65, 178, 0),
                             ),
                           ),
-                        ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                      left: 50,
-                    ),
-                    child: CircularPercentIndicator(
-                      radius: 18.0,
-                      lineWidth: 6.0,
-                      percent: double.parse(items[index_][4]) / 5.0,
-                      center: new Text(
-                        "${items[index_][4]}",
-                        style: GoogleFonts.notoSans(
-                          textStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(221, 65, 178, 0),
-                          ),
                         ),
+                        progressColor: Colors.green,
                       ),
-                      progressColor: Colors.green,
                     ),
                   ),
                 ],
@@ -161,18 +193,32 @@ class CustomSectionsScrollview extends StatelessWidget {
         return Wrap(children: [
           Padding(
             padding: EdgeInsets.only(
-              left: 50,
-              right: 10,
+              left: 10,
+              right: 50,
               top: ((index == 0) ? 30 : 10),
               bottom: 5,
             ),
-            child: Text(
-              sectionNames[index],
-              style: GoogleFonts.notoSans(
-                textStyle: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 41, 187, 0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 41, 187, 0),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              height: 40,
+              width: 1000,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 2,
+                  left: 30,
+                ),
+                child: Text(
+                  sectionNames[index],
+                  style: GoogleFonts.notoSans(
+                    textStyle: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 232, 255, 226),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -223,9 +269,12 @@ class CustomSections extends StatelessWidget {
               bottom: 10,
             ),
             child: Container(
-              color: const Color.fromARGB(68, 89, 255, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Color.fromARGB(99, 89, 255, 0),
+              ),
               width: 240,
-              child: createTile(index, items, section_name, context),
+              child: SectionTiles(index, items, section_name, context),
             ),
           );
         },
@@ -290,25 +339,62 @@ class Footer extends StatelessWidget {
             // Cart Button
             Expanded(
               child: InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return const CartScreen();
-                  }));
-                },
-                splashColor: Colors.transparent,
-                child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      right: 10,
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    child: Container(
-                        width: 50,
-                        child: Image.asset(
-                            'lib/images/fixed_images/cart_icon.png'))),
-              ),
+                  onTap: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const CartScreen();
+                    }));
+                  },
+                  splashColor: Colors.transparent,
+                  child: Consumer<ItemModel>(builder: (context, value, child) {
+                    return Scaffold(
+                      backgroundColor: Colors.transparent,
+                      floatingActionButtonLocation:
+                          FloatingActionButtonLocation.endTop,
+                      floatingActionButton: (value.cart_items.length > 0)
+                          ? (Padding(
+                              padding: EdgeInsets.only(
+                                top: 7,
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.red,
+                                ),
+                                width: 30,
+                                height: 22,
+                                child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "${value.cart_items.length}",
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            ))
+                          : (Container()),
+                      body: Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              top: 10,
+                              bottom: 10,
+                            ),
+                            child: Container(
+                                width: 50,
+                                child: Image.asset(
+                                    'lib/images/fixed_images/cart_icon.png'))),
+                      ),
+                    );
+                  })),
             ),
             // Pay button
             Expanded(
@@ -316,7 +402,7 @@ class Footer extends StatelessWidget {
                 onTap: () {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
-                    return PaymentScreen_();
+                    return PaymentScreen();
                   }));
                 },
                 splashColor: Colors.transparent,
