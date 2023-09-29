@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'screens/intro_screens.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized;
   runApp(const MyApp());
 }
 

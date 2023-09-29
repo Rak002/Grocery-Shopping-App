@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'package:grocery_shopping_app/screens/login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class IntroScreen extends StatelessWidget {
-  final PageController _controller = PageController(initialPage: 0);
-
   IntroScreen({super.key});
 
   @override
@@ -93,7 +91,7 @@ class IntroScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) {
-              return HomeScreen();
+              return LoginScreen();
             }));
           },
           style: OutlinedButton.styleFrom(
