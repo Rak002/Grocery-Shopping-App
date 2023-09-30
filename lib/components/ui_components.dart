@@ -5,6 +5,7 @@ import '../models/item_model.dart';
 import '../screens/home_screen.dart';
 import '../screens/cart_screen.dart';
 import '../screens/payment_screen.dart';
+import '../screens/user_screen.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'dart:io';
 
@@ -16,7 +17,6 @@ Widget SectionTiles(
       return Image.asset('lib/images/var_images/not_found.png');
     },
   );
-
   return InkWell(
     child: Padding(
         padding: const EdgeInsets.only(
@@ -243,7 +243,7 @@ class CustomSectionsScrollview extends StatelessWidget {
 }
 
 class CustomSections extends StatelessWidget {
-  String section_name;
+  late final String section_name;
   CustomSections(this.section_name);
 
   @override
@@ -275,6 +275,7 @@ class CustomSections extends StatelessWidget {
               ),
               width: 240,
               child: SectionTiles(index, items, section_name, context),
+              //child: Container(),
             ),
           );
         },
@@ -458,7 +459,10 @@ AppBar Header(BuildContext context) {
       ),
       InkWell(
         onTap: () {
-          // navigate to user info page
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return const userScreen();
+          }));
         },
         splashColor: Colors.transparent,
         child: Padding(

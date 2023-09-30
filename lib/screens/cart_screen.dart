@@ -20,7 +20,7 @@ class CartScreen extends StatelessWidget {
                   left: 20,
                 ),
                 child: Text(
-                  "My Cart",
+                  "My Cart (${value.cart_items.length})",
                   style: GoogleFonts.notoSans(
                     textStyle: const TextStyle(
                       fontSize: 24,
